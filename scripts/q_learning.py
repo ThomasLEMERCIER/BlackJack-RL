@@ -3,7 +3,7 @@ import time
 from tqdm import tqdm
 
 from src.envs import SimpleBlackjack
-from src.explorations import EpsilonGreedy
+from src.explorations import EpsilonGreedy, UCB
 from src.agents import QlearningAgent
 from src.utils.general import state_to_index, get_num_states
 from src.utils.visualization import plot_policy_simple_blackjack
@@ -56,7 +56,8 @@ if __name__ == "__main__":
 
     n_episodes = 500_000
     env = SimpleBlackjack(seed=42)
-    exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
+    # exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
+    exploration = UCB(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n, seed=42)
     qlearning_parameters = QlearningParameters(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n)
     agent = QlearningAgent(qlearning_parameters, exploration)
 

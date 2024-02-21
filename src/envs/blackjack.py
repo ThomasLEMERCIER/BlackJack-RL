@@ -102,6 +102,9 @@ class SimpleBlackjack(gym.Env):
         self.dealer_hand.add_card(self.draw_card())
         self.dealer_hand.add_card(self.draw_card())
 
+        if self.dealer_hand.value == 21 or self.player_hand.value == 21:
+            return self.reset()
+
         self.current_state = np.array([self.player_hand.value, self.dealer_hand.cards[0], self.player_hand.aces], dtype=np.int32)
         return self.current_state
     
@@ -124,7 +127,11 @@ class SimpleBlackjack(gym.Env):
         Args:
             mode (str): The mode to render with. The string must be 'ansi' or 'human'
         """
-        assert mode in ["ansi"]
-        print(f"Player's hand: {self.player_hand}")
-        print(f"Dealer's hand: {self.dealer_hand}")
-        print(f"Current state: {self.current_state}")
+        assert mode in ["ansi", "hidden"]
+        if mode == "hidden":
+            print(f"Player's hand: {self.player_hand}")
+            print(f"Dealer's hand: {self.dealer_hand.cards[0]} ?")
+        else:
+            print(f"Player's hand: {self.player_hand}")
+            print(f"Dealer's hand: {self.dealer_hand}")
+            print(f"Current state: {self.current_state}")
