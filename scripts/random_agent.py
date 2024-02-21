@@ -1,22 +1,22 @@
 import gym
 import time
-import argparse
+from tqdm import tqdm
 
-from src.agents import Agent, RandomAgent
 from src.envs import SimpleBlackjack
+from src.agents import RandomAgent
 
-def main(env: gym.Env, agent: Agent, n_episodes: int):
+def main(env: gym.Env, agent: RandomAgent, n_episodes: int):
     start = time.time()
     n_wins = 0
     n_draws = 0
-    for _ in range(n_episodes):
+
+    for _ in tqdm(range(n_episodes)):
         state = env.reset()
-        agent.reset()
         terminated = False
         while not terminated:
             action = agent.act(state)
             state, reward, terminated, _, _ = env.step(action)
-            agent.step(state, reward, terminated)
+
         if reward == 1:
             n_wins += 1
         elif reward == 0:
@@ -28,14 +28,9 @@ def main(env: gym.Env, agent: Agent, n_episodes: int):
     print(f"\nTime taken: {time.time() - start:.2f} seconds")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run the main script.")
-    parser.add_argument("--n_episodes", type=int, default=200000, help="The number of episodes to run.")
-    parser.add_argument("--env", type=str, default="SimpleBlackjack", help="The environment to use.")
-    parser.add_argument("--agent", type=str, default="RandomAgent", help="The agent to use.")
-    args = parser.parse_args()
 
+    n_episodes = 500_000
     env = SimpleBlackjack(seed=42)
     agent = RandomAgent(env.action_space, seed=42)
-    n_episodes = 200000
 
     main(env, agent, n_episodes)

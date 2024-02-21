@@ -44,17 +44,16 @@ class SimpleBlackjack(gym.Env):
     - 0: Draw
 
     State space:
-    - The player's current sum (0-31) The ace is counted as 11 initially. If the player's sum exceeds 21, the ace is counted as 1.
+    - The player's current sum (2-31) The ace is counted as 11 initially. If the player's sum exceeds 21, the ace is counted as 1.
     - The dealer's face-up card (2-11)
     - Number of aces in the player's hand still counting as 11 (0-1)
     """
     def __init__(self, seed: int=42) -> None:
         super().__init__()
-        self.seed = seed
         self.rand = random.Random(seed)
 
         self.action_space = spaces.Discrete(2)
-        self.observation_space = spaces.MultiDiscrete([32, 10, 2])
+        self.observation_space = spaces.Box(low=np.array([2, 2, 0]), high=np.array([31, 11, 1]), dtype=np.int32)
         self.reward_range = (-1, 1)
 
         self.current_state = None
@@ -76,7 +75,7 @@ class SimpleBlackjack(gym.Env):
             self.player_hand.add_card(self.draw_card())
             if self.player_hand.value > 21:
                 return self.current_state, -1, True, False, {}
-            self.current_state = np.array([self.player_hand.value, self.dealer_hand.cards[0], self.player_hand.aces])
+            self.current_state = np.array([self.player_hand.value, self.dealer_hand.cards[0], self.player_hand.aces], dtype=np.int32)
             return self.current_state, 0, False, False, {}
         else:  # Stand
             self.dealer_play()
@@ -103,7 +102,7 @@ class SimpleBlackjack(gym.Env):
         self.dealer_hand.add_card(self.draw_card())
         self.dealer_hand.add_card(self.draw_card())
 
-        self.current_state = np.array([self.player_hand.value, self.dealer_hand.cards[0], self.player_hand.aces])
+        self.current_state = np.array([self.player_hand.value, self.dealer_hand.cards[0], self.player_hand.aces], dtype=np.int32)
         return self.current_state
     
     def draw_card(self) -> int:
