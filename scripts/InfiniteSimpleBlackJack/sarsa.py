@@ -2,7 +2,7 @@ import gym
 import time
 from tqdm import tqdm
 
-from src.envs import SimpleBlackjack
+from src.envs import InfiniteSimpleBlackjack
 from src.explorations import EpsilonGreedy, UCB
 from src.agents import SarsaAgent
 from src.utils.general import state_to_index, get_num_states
@@ -56,7 +56,7 @@ def main(env: gym.Env, agent: SarsaAgent, n_episodes: int):
 if __name__ == "__main__":
 
     n_episodes = 500_000
-    env = SimpleBlackjack(seed=42)
+    env = InfiniteSimpleBlackjack(seed=42)
     # exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
     exploration = UCB(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n, seed=42)
     qlearning_parameters = SarsaParameters(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n)

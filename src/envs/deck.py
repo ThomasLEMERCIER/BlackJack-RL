@@ -10,28 +10,24 @@ def get_deck(packs) -> list:
 
 class Deck:
     def __init__(self, packs: int=6) -> None:
+        self.cards = get_deck(packs)
         self.packs = packs
-        
-        self.cards = get_deck(self.packs)
-        random.shuffle(self.cards)
+        self.reset()
 
-        self.count = len(self.cards)
-
-    def remove_card(self, card) -> bool:
-        self.cards.remove(card)
-        self.count -= 1
-        return self.count == 0
+    def draw(self) -> int:
+        card = self.cards[self.index]
+        self.index += 1
+        return card
 
     def shuffle(self) -> None:
         random.shuffle(self.cards)
 
     def __str__(self) -> str:
         return str(self.cards) + " (count: " + str(self.count) + ")"
-    
+
     def __repr__(self) -> str:
         return str(self)
 
     def reset(self) -> None:
-        self.cards = get_deck(self.packs)
         self.shuffle()
-        self.count = len(self.cards)
+        self.index = 0

@@ -22,6 +22,9 @@ class Hand:
     
     def __repr__(self) -> str:
         return str(self)
+    
+    def __len__(self) -> int:
+        return len(self.cards)
 
     def reset(self) -> None:
         self.cards = []

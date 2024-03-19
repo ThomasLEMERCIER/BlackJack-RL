@@ -6,7 +6,6 @@ from src.envs import SimpleBlackjack
 from src.explorations import EpsilonGreedy, UCB
 from src.agents import QlearningAgent
 from src.utils.general import state_to_index, get_num_states
-from src.utils.visualization import plot_policy_simple_blackjack
 from src.utils.data_struct import Transition, QlearningParameters
 
 def play_episode(env: gym.Env, agent: QlearningAgent, render: bool = False):
@@ -52,9 +51,11 @@ def main(env: gym.Env, agent: QlearningAgent, n_episodes: int):
 
     print(f"\nTime taken: {time.time() - start:.2f} seconds")
 
+import numpy as np
+
 if __name__ == "__main__":
 
-    n_episodes = 500_000
+    n_episodes = 10_000
     env = SimpleBlackjack(seed=42)
     # exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
     exploration = UCB(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n, seed=42)
@@ -64,8 +65,6 @@ if __name__ == "__main__":
     main(env, agent, n_episodes)
 
     policy = agent.get_policy()
-    plot_policy_simple_blackjack(policy, env.observation_space)
-
 
     n_test_episodes = 10000
     rewards = [play_episode(env, agent) for _ in range(n_test_episodes)]
