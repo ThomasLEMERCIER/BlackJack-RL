@@ -318,8 +318,8 @@ class Blackjack(gym.Env):
 
         self.action_space = spaces.Discrete(2)
         self.observation_space = spaces.Dict({
-            "player": spaces.Sequence(spaces.Discrete(11)),
-            "dealer": spaces.Discrete(11)
+            "dealer": spaces.Box(low=np.array([2]), high=np.array([11]), dtype=np.int32),
+            "player": spaces.Sequence(spaces.Box(low=np.array([2]), high=np.array([11]), dtype=np.int32))
         })
         self.reward_range = (-1, 1)
 
@@ -342,8 +342,8 @@ class Blackjack(gym.Env):
         if action == 1:  # Hit
             self.player_hand.add_card(self.draw_card())
             self.current_state = {
+                "dealer": self.dealer_hand.cards[0],
                 "player": self.player_hand.cards,
-                "dealer": self.dealer_hand.cards[0]
             }
             if self.player_hand.value > 21:
                 return self.current_state, -1, True, False, {}
@@ -352,8 +352,8 @@ class Blackjack(gym.Env):
         else:  # Stand
             self.dealer_play()
             self.current_state = {
+                "dealer": self.dealer_hand.cards[0],
                 "player": self.player_hand.cards,
-                "dealer": self.dealer_hand.cards
             }
             if self.dealer_hand.value > 21:
                 return self.current_state, 1, True, False, {}
@@ -383,8 +383,8 @@ class Blackjack(gym.Env):
             return self.reset()
 
         self.current_state = {
+            "dealer": self.dealer_hand.cards[0],
             "player": self.player_hand.cards,
-            "dealer": self.dealer_hand.cards[0]
         }
         return self.current_state
     
