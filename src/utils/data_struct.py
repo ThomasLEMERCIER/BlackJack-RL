@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import torch
 
 @dataclass
 class QlearningParameters:
@@ -21,3 +22,10 @@ class Transition:
     next_state: int
     reward: float
     done: bool
+
+@dataclass
+class DQNParameters:
+    batch_size: int = 32
+    gamma: float = 0.9
+    freq_target_update: int = 100
+    device: torch.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
