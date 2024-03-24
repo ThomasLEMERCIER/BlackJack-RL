@@ -41,7 +41,7 @@ class BaseBlackjack(gym.Env):
 
     def __init__(self, seed: int=42, finite_deck: bool=False, packs: int=6) -> None:
         super().__init__()
-        self.game_deck = Deck(finite_deck,packs,seed)
+        self.game_deck = Deck(finite_deck, packs, seed)
         
         self.action_space = spaces.Discrete(2)
         self.reward_range = (-1, 1)
@@ -68,17 +68,10 @@ class BaseBlackjack(gym.Env):
         if self.game_deck.count() > 0 and action == 1:  # Hit
             self.player_hand.add_card(self.draw_card())
             if self.player_hand.value > 21:
-                if self.player_hand.usable_ace:
-                    self.player_hand.use_ace()
-                    if self.player_hand.value > 21 :
-                        self.current_state = self.get_current_state()
-                        return self.current_state, -1, True, False, {}
-                else:
-                    self.current_state = self.get_current_state()
-                    return self.current_state, -1, True, False, {}
+                self.current_state = self.get_current_state()
+                return self.current_state, -1, True, False, {}
             self.current_state = self.get_current_state()
             return self.current_state, 0, False, False, {}
-        
         else:  # Stand
             self.dealer_play()
             self.current_state = self.get_current_state()
@@ -98,14 +91,10 @@ class BaseBlackjack(gym.Env):
     def verify_winner(self) -> int:
         """ Returns the reward after the dealer has played """
         if self.dealer_hand.value > 21 :
-            return 1   
+            return 1
         elif self.player_hand.value > self.dealer_hand.value:
             return 1
         elif self.player_hand.value < self.dealer_hand.value:
-            if self.player_hand.usable_ace:
-                self.player_hand.use_ace()
-                if self.player_hand.value < 21 and self.player_hand.value > self.dealer_hand.value:
-                    return 1
             return -1
         else:
             return 0
@@ -114,6 +103,7 @@ class BaseBlackjack(gym.Env):
         """ Resets the state of the environment and returns an initial observation. """
         self.player_hand.reset()
         self.dealer_hand.reset()
+        self.game_deck.reset()
 
         self.player_hand.add_card(self.draw_card())
         self.player_hand.add_card(self.draw_card())
@@ -126,7 +116,6 @@ class BaseBlackjack(gym.Env):
 
         self.current_state = self.get_current_state()
         return self.current_state
-    
 
     def render(self, mode: str="ansi") -> None:
         """ Renders the environment. """
@@ -142,7 +131,6 @@ class BaseBlackjack(gym.Env):
             print(f"Dealer's hand: {self.dealer_hand}")
             print(f"Current state: {self.current_state}")
             print("")
-
 
 class InfiniteSimpleBlackjack(BaseBlackjack):
     """ Infinite Blackjack environment
@@ -188,7 +176,7 @@ class SimpleBlackjack(BaseBlackjack):
         return np.array([self.player_hand.value, self.dealer_hand.cards[0], self.player_hand.usable_ace, self.player_hand.count()], dtype=np.int32)
 
 
-class Blackjack(gym.Env):
+class Blackjack(BaseBlackjack):
     """ Blackjack environment
 
     State space:
@@ -206,7 +194,4 @@ class Blackjack(gym.Env):
         })
 
     def get_current_state(self):
-        self.current_state = {
-            "dealer": self.dealer_hand.cards[0],
-            "player": self.player_hand.cards,
-        }
+        return { "dealer": self.dealer_hand.cards[0], "player": self.player_hand.cards }

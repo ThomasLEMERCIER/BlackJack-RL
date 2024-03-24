@@ -60,7 +60,7 @@ def main(env: gym.Env, agent: DQN, n_episodes: int):
     print(f"\nTime taken: {time.time() - start:.2f} seconds")
 
 if __name__ == "__main__":
-    n_episodes = 50_000
+    n_episodes = 100_000
     env = Blackjack(seed=42)
 
     params = DQNParameters()
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     replay_buffer = ReplayBuffer(10_000)
     optimizer = torch.optim.AdamW(q_network.parameters(), lr=0.001, weight_decay=0.0001)
     criterion = torch.nn.MSELoss()
-    exploration = EpsilonGreedy(0.3, 0.9)
+    exploration = EpsilonGreedy(0.8, 0.99)
 
     agent = DQN(q_network, target_network, replay_buffer, optimizer, criterion, exploration, params)
     main(env, agent, n_episodes)

@@ -56,7 +56,7 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    n_episodes = 10_000
+    n_episodes = 1_000_000
     env = InfiniteSimpleBlackjack(seed=42)
     # exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
     exploration = UCB(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n, seed=42)

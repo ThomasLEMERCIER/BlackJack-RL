@@ -55,10 +55,10 @@ import numpy as np
 
 if __name__ == "__main__":
 
-    n_episodes = 10_000
+    n_episodes = 100_000
     env = SimpleBlackjack(seed=42)
-    # exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
-    exploration = UCB(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n, seed=42)
+    exploration = EpsilonGreedy(epsilon=0.8, decay=0.999999, seed=42)
+    # exploration = UCB(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n, seed=42)
     qlearning_parameters = QlearningParameters(num_states=get_num_states(env.observation_space), num_actions=env.action_space.n)
     agent = QlearningAgent(qlearning_parameters, exploration)
 
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     policy = agent.get_policy()
 
-    n_test_episodes = 10000
+    n_test_episodes = 100_000
     rewards = [play_episode(env, agent) for _ in range(n_test_episodes)]
     n_wins = sum(reward == 1 for reward in rewards)
     n_draws = sum(reward == 0 for reward in rewards)

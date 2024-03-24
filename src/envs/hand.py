@@ -1,22 +1,19 @@
 
 class Hand:
     def __init__(self) -> None:
-        self.cards = []
-        self.usable_ace = 0
-        self.used_ace = 0
-        self.value = 0
+        self.reset()
 
     def add_card(self, card) -> None:
         self.cards.append(card)
         self.value += card
-        if card == 11 and not self.used_ace: #only one possible usable ace
-            self.usable_ace = 1
+        if card == 11:
+            self.usable_ace += 1
+        self.adjust_aces()
 
-    def use_ace(self) -> None:
-        if self.usable_ace: 
+    def adjust_aces(self):
+        while self.usable_ace and self.value > 21:
             self.value -= 10
-            self.usable_ace = 0
-            self.used_ace = 1
+            self.usable_ace -= 1
 
     def count(self) -> int:
         return len(self.cards)

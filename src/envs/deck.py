@@ -10,7 +10,7 @@ def get_deck(packs) -> list:
     return deck
 
 class Deck:
-    def __init__(self, finite_deck: bool=True, packs: int=6, seed: int=42 ) -> None:
+    def __init__(self, finite_deck: bool=True, packs: int=6, seed: int=42) -> None:
         self.rand = random.Random(seed)
         self.packs = packs
         self.finite_deck = finite_deck
@@ -20,7 +20,7 @@ class Deck:
             self.shuffle()
         else:
             self.cards = []
-        
+
     def draw(self) -> int:
         if self.finite_deck:
             card = self.cards.pop(0)
@@ -43,7 +43,7 @@ class Deck:
             return f"{self.count()} cards in the deck : {self.cards}"
         else:
             return "Infinite deck"
-        
+
     def __repr__(self) -> str:
         return str(self)
 
