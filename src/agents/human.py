@@ -9,11 +9,9 @@ class HumanAgent(Agent):
         """ Initialize the agent. """
         super().__init__(seed)
 
-
     def step(self, transition: Transition) -> None:
         """ The method that is called at each time step. """
         pass
-
 
     def act(self, state: np.ndarray) -> int:
         """ The method that is called to select an action. """
