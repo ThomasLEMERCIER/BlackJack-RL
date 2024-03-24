@@ -47,7 +47,7 @@ def get_num_states(space: spaces.Box) -> int:
     return np.prod(space.high - space.low + 1)
 
 
-def state_to_array_encoding(state: dict, space: spaces.Dict) -> torch.Tensor:
+def state_to_tensor_encoding(state: dict, space: spaces.Dict) -> torch.Tensor:
     """
     Converts a state to a tensor.
 
@@ -56,7 +56,7 @@ def state_to_array_encoding(state: dict, space: spaces.Dict) -> torch.Tensor:
         space (gym.spaces): Environment.
 
     Returns:
-        np.ndarray: Tensor.
+        torch.Tensor: Tensor.
     """
     n_cards = (space["dealer"].high - space["dealer"].low + 1).item()
     tensor = torch.zeros(n_cards + 1, dtype=torch.float32)
@@ -76,3 +76,37 @@ def get_input_dim_encoding(space: spaces.Dict) -> int:
         int: Input dimension.
     """
     return (space["dealer"].high - space["dealer"].low + 2).item()
+
+def state_to_tensor_sequence(state: dict, space: spaces.Dict, max_length: int) -> torch.Tensor:
+    """
+    Converts a state to a tensor.
+
+    Args:
+        state (dict): State. {"dealer": int, "player": list[int]}
+        space (gym.spaces): Environment.
+
+    Returns:
+        torch.Tensor: Tensor.
+    """
+    tensor = torch.zeros(max_length + 1, dtype=torch.float32)
+    tensor[-1] = state["dealer"]
+    for i, card in enumerate(state["player"]):
+        tensor[i] = card
+    return tensor
+
+def state_to_tensor_embedding(state: dict, space: spaces.Box, max_length: int) -> torch.Tensor:
+    """
+    Converts a state to a tensor.
+
+    Args:
+        state (dict): State. {"dealer": int, "player": list[int]}
+        space (gym.spaces): Environment.
+
+    Returns:
+        torch.Tensor: Tensor.
+    """
+    tensor = torch.zeros(max_length + 1, dtype=torch.float32)
+    tensor[-1] = state["dealer"]
+    for i, card in enumerate(state["player"]):
+        tensor[i] = card - space["dealer"].low.item()
+    return tensor

@@ -9,21 +9,21 @@ from src.agents.dqn import DQN
 from src.utils.data_struct import Transition, DQNParameters
 from src.explorations import EpsilonGreedy
 from src.utils.buffer import ReplayBuffer
-from src.utils.general import state_to_array_encoding, get_input_dim_encoding
+from src.utils.general import state_to_tensor_encoding, get_input_dim_encoding
 from src.networks import MLP
 
 def play_episode(env: gym.Env, agent: DQN, render: bool = False):
     state = env.reset()
     if render:
         env.render()
-    state = state_to_array_encoding(state, env.observation_space)
+    state = state_to_tensor_encoding(state, env.observation_space)
     terminated = False
     while not terminated:
         action = agent.get_best_action(state)
         next_state, reward, terminated, _, _ = env.step(action)
         if render:
             env.render()
-        next_state = state_to_array_encoding(next_state, env.observation_space)
+        next_state = state_to_tensor_encoding(next_state, env.observation_space)
         state = next_state
     return reward
 
@@ -33,13 +33,13 @@ def main(env: gym.Env, agent: DQN, n_episodes: int):
     n_draws = 0
     for _ in tqdm(range(n_episodes)):
         state = env.reset()
-        state = state_to_array_encoding(state, env.observation_space)
+        state = state_to_tensor_encoding(state, env.observation_space)
         terminated = False
         while not terminated:
             action = agent.act(state)
             next_state, reward, terminated, _, _ = env.step(action)
 
-            next_state = state_to_array_encoding(next_state, env.observation_space)
+            next_state = state_to_tensor_encoding(next_state, env.observation_space)
             action = torch.Tensor([action]).long()
             reward = torch.Tensor([reward]).float()
             terminated = torch.Tensor([terminated]).float()

@@ -193,5 +193,7 @@ class Blackjack(BaseBlackjack):
             "player": spaces.Sequence(spaces.Box(low=np.array([2]), high=np.array([11]), dtype=np.int32))
         })
 
+        self.max_number_of_cards = 22
+
     def get_current_state(self):
         return { "dealer": self.dealer_hand.cards[0], "player": self.player_hand.cards }
