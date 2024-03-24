@@ -79,5 +79,5 @@ if __name__ == "__main__":
     rewards = [play_episode(env, agent) for _ in range(n_test_episodes)]
     n_wins = sum(reward == 1 for reward in rewards)
     n_draws = sum(reward == 0 for reward in rewards)
-    print(f"Win rate: {n_wins / n_test_episodes:.2f}")
-    print(f"Draw rate: {n_draws / n_test_episodes:.2f}")
+    print(f"Win rate: {n_wins / n_test_episodes:.4f}")
+    print(f"Draw rate: {n_draws / n_test_episodes:.4f}")
