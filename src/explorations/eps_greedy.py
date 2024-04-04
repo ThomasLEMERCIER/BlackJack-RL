@@ -3,6 +3,16 @@ import numpy as np
 
 from .exploration_policy import ExplorationPolicy
 
+def argmax(q_values):
+    for i in range(len(q_values)):
+        if q_values[i] > top:
+          top = q_values[i]
+          ties = [i]
+        elif q_values[i] == top:
+          ties.append(i)
+    ind = np.random.choice(ties)
+    return ind
+
 
 class EpsilonGreedy(ExplorationPolicy):
     def __init__(self, epsilon: float, decay: float=1.0, seed: int = None) -> None:
@@ -15,4 +25,4 @@ class EpsilonGreedy(ExplorationPolicy):
         if self.rand.random() < self.epsilon:
             return self.rand.randrange(0, len(q_values))
         else:
-            return np.argmax(q_values)
+            return argmax(q_values)
