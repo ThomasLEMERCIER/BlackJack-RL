@@ -17,11 +17,11 @@ class UCB(ExplorationPolicy):
         zero_counts_mask = (self.action_counts[state] == 0)
 
         if np.any(zero_counts_mask):
-            action_with_zero_count = self.argmax(zero_counts_mask)
+            action_with_zero_count = np.argmax(zero_counts_mask)#self.get_argmax(zero_counts_mask)
             self.action_counts[state, action_with_zero_count] += 1
             return action_with_zero_count
 
         ucb_values = q_values + self.c * np.sqrt(np.log(total_counts) / self.action_counts[state])
-        action = self.argmax(ucb_values)
+        action = np.argmax(ucb_values)#self.get_argmax(ucb_values)
         self.action_counts[state, action] += 1
         return action

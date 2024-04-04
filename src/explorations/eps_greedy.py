@@ -12,4 +12,4 @@ class EpsilonGreedy(ExplorationPolicy):
         if self.rand.random() < self.epsilon:
             return self.rand.randrange(0, len(q_values))
         else:
-            return self.argmax(q_values)
+            return np.argmax(q_values) #self.get_argmax(q_values)

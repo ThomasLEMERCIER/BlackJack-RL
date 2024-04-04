@@ -8,9 +8,10 @@ class ExplorationPolicy(ABC):
         """ Initialize the exploration strategy. """
         self.rand = random.Random(seed)
 
-    def argmax(q_values: list):
+    def get_argmax(q_values: list):
         """returns argmax with random choice in case of ties"""
         top=0
+        ties=[]
         for i in range(len(q_values)):
             if q_values[i] > top:
                 top = q_values[i]
