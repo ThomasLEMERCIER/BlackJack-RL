@@ -84,7 +84,7 @@ class BaseBlackjack(gym.Env):
         
     def dealer_play(self) -> None:
         """ The dealer plays """
-        while self.dealer_hand.value < 17:
+        while self.game_deck.count() > 0 and self.dealer_hand.value < 17:
             draw = self.draw_card()
             self.dealer_hand.add_card(draw)
 
