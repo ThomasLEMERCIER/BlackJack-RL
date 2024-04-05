@@ -18,6 +18,13 @@ class SarsaParameters:
     gamma: float = 0.9
 
 @dataclass
+class MonteCarloParameters:
+    num_states: int
+    num_actions: int
+    alpha: float = 0.1
+    gamma: float = 0.9
+
+@dataclass
 class DQNParameters:
     batch_size: int = 32
     gamma: float = 0.9

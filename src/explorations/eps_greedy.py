@@ -1,8 +1,5 @@
-import random
 import numpy as np
-
 from .exploration_policy import ExplorationPolicy
-
 
 class EpsilonGreedy(ExplorationPolicy):
     def __init__(self, epsilon: float, decay: float=1.0, seed: int = None) -> None:
@@ -15,4 +12,4 @@ class EpsilonGreedy(ExplorationPolicy):
         if self.rand.random() < self.epsilon:
             return self.rand.randrange(0, len(q_values))
         else:
-            return np.argmax(q_values)
+            return np.argmax(q_values) #self.get_argmax(q_values)
